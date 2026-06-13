@@ -1,0 +1,11 @@
+a{
+    color: blue;
+}
+h1{
+    text-align: center;
+}
+img.capy{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

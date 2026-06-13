@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="style.css"/>
+    <title>PROFILE</title>
+</head>
+<body>
+    <img class="capy" src="https://cdn2.tuoitre.vn/471584752817336320/2024/7/22/capybara4-1721617791723166751080.jpg" alt="capybara" width="150px">
+    <p><h1>web này lưu code của LMNY-11 và profile cá nhân</h1></p> 
+    <a href="https://codeforces.com/profile/hohoankiem18"><h2>Codeforces</h2></a>
+    <a href="https://github.com/LMNY-11"><h2>Github</h2></a>
+    <a href="https://oj.vnoi.info/user/hohoankiem18"><h2>Vnoi</h2></a>
+    <a href="https://spoj.com/status/hohoankiem18/"><h2>Spoj</h2></a>
+    <a href="https://marisaoj.com/user/AnBlueCN/submissions"><h2>Marisaoj</h2></a>
+    <a href="https://cses.fi/problemset/"><h2>Cses</h2></a>
+    <details>
+        <summary>segment tree update bac thang</summary>
+            <code>
+                <pre>
+#include <bits/stdc++.h>
+#define FOR(i,a,b) for(int i=(a);i<=(b);++i)
+#define int long long 
+#define ll long long 
+using namespace std;
+const int N = 2e5+5;
+const int mod = 1e9+7;
+int st[4N];
+int lz_L[4N];
+int lz_I[4N];
+int a[N];
+int n,q;
+int sum(int i){
+    return i(i+1)/2;
+}
+void apply(int t,int l,int r,int L,int I){
+    st[t] += L(r-l+1) + I(l*(r-l+1) + sum(r-l));
+    lz_L[t]+= L;
+    lz_I[t]+= I;
+}
+void push(int t,int l,int r){
+    int mid=(l+r)>>1;
+    if(lz_I[t]!=0  lz_L[t]!=0){
+        apply(t<<1,l,mid,lz_L[t],lz_I[t]);
+        apply((t<<1)|1,mid+1,r,lz_L[t],lz_I[t]);
+        lz_L[t]=0;
+        lz_I[t]=0;
+    }
+}
+void update(int t,int l,int r,int u,int v,int Lx){
+    if(l>vr<u) return;
+    if(u<=l&&r<=v){
+        apply(t,l,r,1-Lx,1);
+        return;
+    }
+    int mid=(l+r)>>1;
+    push(t,l,r);
+    update(t<<1,l,mid,u,v,Lx);
+    update((t<<1)|1,mid+1,r,u,v,Lx);
+    st[t] = (st[t<<1]+st[(t<<1)|1]);
+}
+int get(int t,int l,int r,int u,int v){
+    if(l>v||r<u) return 0;
+    if(u<=l&&r<=v) return st[t];
+    int mid=(l+r)>>1;
+    push(t,l,r);
+    return (get(t<<1,l,mid,u,v) + get((t<<1)|1,mid+1,r,u,v));
+}
+void build(int t,int l,int r){
+    if(l==r){
+        st[t] = a[l];
+        return;
+    }
+    int mid=(l+r)>>1;
+    build(t<<1,l,mid);
+    build((t<<1)|1,mid+1,r);
+    st[t] = (st[t<<1] + st[(t<<1)|1]);
+}
+signed main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cin>>n>>q;
+    FOR(i,1,n)
+        cin>>a[i];
+    build(1,1,n);
+    while(q--){
+        int type,u,v;
+        cin>>type>>u>>v;
+        if(type==1){
+            update(1,1,n,u,v,u);
+        }
+        else if(type==2){
+            cout&lt;&lt;get(1,1,n,u,v)&lt;&lt;"\n";
+        }
+    }
+    return 0;
+}
+                </pre>
+            </code>
+    </details>
+
+</body>
+</html>
